@@ -75,10 +75,17 @@ export function stringifyWithSchema(obj: any, schema?: TSchema): string {
   function stringifyValue(value: any): string | undefined {
 
     if (typeof value === 'string') {
+      if ((
+        value === 'integer' ||
+        value === 'boolean' ||
+        value === 'string' ||
+        value === 'binary'
+      ) && path[path.length - 1] === 'type') {
+        return `"${value}"`
+      }
+
       if (isLongProp(path, schema, obj)) {
-        if (value === 'integer' && path[path.length - 1] === 'type') {
-          return `"${value}"`
-        }
+
         return value
       }
     }
