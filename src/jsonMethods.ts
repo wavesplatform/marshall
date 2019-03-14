@@ -1,12 +1,12 @@
 import * as create from 'parse-json-bignumber/dist/parse-json-bignumber'
 
-const {parse, stringify} = create()
-import {getTransactionSchema, orderSchemaV0, orderSchemaV2} from './schemas'
-import {TSchema} from './schemaTypes'
-import {LONG} from './serializePrimitives'
-import {convertLongFields, convertTxLongFields} from './index'
-import {TToLongConverter} from './parse'
-import {TFromLongConverter} from './serialize'
+const { parse, stringify } = create()
+import { getTransactionSchema, orderSchemaV0, orderSchemaV2 } from './schemas'
+import { TSchema } from './schemaTypes'
+import { LONG } from './serializePrimitives'
+import { convertLongFields, convertTxLongFields } from './index'
+import { TToLongConverter } from './parse'
+import { TFromLongConverter } from './serialize'
 
 function resolvePath(path: string[], obj: any): any {
   if (path.length === 0) return obj
@@ -76,6 +76,9 @@ export function stringifyWithSchema(obj: any, schema?: TSchema): string {
 
     if (typeof value === 'string') {
       if (isLongProp(path, schema, obj)) {
+        if (value === 'integer' && path[path.length - 1] === 'type') {
+          return `"${value}"`
+        }
         return value
       }
     }
@@ -188,7 +191,7 @@ export function parseTx<LONG = string>(str: string, toLongConverter?: TToLongCon
  * @param fromLongConverter
  */
 export function stringifyTx<LONG>(tx: any, fromLongConverter?: TFromLongConverter<LONG>): string {
-  const {type, version} = tx
+  const { type, version } = tx
   const schema = getTransactionSchema(type, version)
   const txWithStrings = convertLongFields(tx, schema, undefined, fromLongConverter)
   return stringifyWithSchema(txWithStrings, schema)
