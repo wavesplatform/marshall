@@ -1,12 +1,12 @@
 import * as create from 'parse-json-bignumber/dist/parse-json-bignumber'
 
-const { parse, stringify } = create()
-import { getTransactionSchema, orderSchemaV0, orderSchemaV2 } from './schemas'
-import { TSchema } from './schemaTypes'
-import { LONG } from './serializePrimitives'
-import { convertLongFields, convertTxLongFields } from './index'
-import { TToLongConverter } from './parse'
-import { TFromLongConverter } from './serialize'
+const {parse, stringify} = create()
+import {getTransactionSchema, orderSchemaV0, orderSchemaV2} from './schemas'
+import {TSchema} from './schemaTypes'
+import {LONG} from './serializePrimitives'
+import {convertLongFields, convertTxLongFields} from './index'
+import {TToLongConverter} from './parse'
+import {TFromLongConverter} from './serialize'
 
 function resolvePath(path: string[], obj: any): any {
   if (path.length === 0) return obj
@@ -47,9 +47,13 @@ const isLongProp = (fullPath: string[], fullSchema: TSchema | undefined, targetO
       if (!objSchema) return false
 
 
-      if (schema.valueField != null) {
+      // If valueField exists in schema we also check if value and not type field is currently processed. E.g:
+      // {type: 'integer', value: 1000}
+      if (schema.valueField != null && fullPath[fullPath.length - 1] === schema.valueField) {
         return go(path.slice(1), objSchema.schema)
-      } else {
+      }
+      //  Otherwise whole object is used as value. E.g.: {type:14, sender: 'example', amount: 1000}
+      else {
         return go(path, objSchema.schema)
       }
 
@@ -76,12 +80,12 @@ export function stringifyWithSchema(obj: any, schema?: TSchema): string {
 
     if (typeof value === 'string') {
 
-      ///TODO: DIRTY HACK
-      if (value === 'integer'
-        && path[0] === 'call'
-        && path[1] === 'args'
-        && path[3] === 'type'
-      ) { return `"${value}"` }
+      // ///TODO: DIRTY HACK
+      // if (value === 'integer'
+      //   && path[0] === 'call'
+      //   && path[1] === 'args'
+      //   && path[3] === 'type'
+      // ) { return `"${value}"` }
 
       if (isLongProp(path, schema, obj)) {
         return value
@@ -196,7 +200,7 @@ export function parseTx<LONG = string>(str: string, toLongConverter?: TToLongCon
  * @param fromLongConverter
  */
 export function stringifyTx<LONG>(tx: any, fromLongConverter?: TFromLongConverter<LONG>): string {
-  const { type, version } = tx
+  const {type, version} = tx
   const schema = getTransactionSchema(type, version)
   const txWithStrings = convertLongFields(tx, schema, undefined, fromLongConverter)
   return stringifyWithSchema(txWithStrings, schema)
