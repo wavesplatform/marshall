@@ -18,11 +18,8 @@ var utf8ArrayToStr = (function () {
         codePt = ((byte1 & 0x1F) << 6) | (array[i++] & 0x3F);
       } else if (byte1 <= 0xEF) {
         codePt = ((byte1 & 0x0F) << 12) | ((array[i++] & 0x3F) << 6) | (array[i++] & 0x3F);
-      } else if (String.fromCodePoint) {
-        codePt = ((byte1 & 0x07) << 18) | ((array[i++] & 0x3F) << 12) | ((array[i++] & 0x3F) << 6) | (array[i++] & 0x3F);
       } else {
-        codePt = 63;    // Cannot convertLongFields four byte code points, so use "?" instead
-        i += 3;
+        codePt = ((byte1 & 0x07) << 18) | ((array[i++] & 0x3F) << 12) | ((array[i++] & 0x3F) << 6) | (array[i++] & 0x3F);
       }
 
       result.push(charCache[codePt] || (charCache[codePt] = charFromCodePt(codePt)));
