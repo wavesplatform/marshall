@@ -418,6 +418,7 @@ const anyOrder = anyOf([
     schema: [txFields.byteConstant(1), ...orderSchemaV1.schema, ...proofsSchemaV0.schema]
   }],
   [2, {type: 'object', withLength: intConverter, schema: [...orderSchemaV2.schema, ...proofsSchemaV1.schema]}],
+  [3, {type: 'object', withLength: intConverter, schema: [...orderSchemaV3.schema, ...proofsSchemaV1.schema]}],
 ], {discriminatorField: 'version', discriminatorBytePos: 4})
 
 export const exchangeSchemaV2: TSchema = {
