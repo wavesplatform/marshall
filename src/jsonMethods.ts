@@ -1,4 +1,4 @@
-import * as create from '@waves/parse-json-bignumber/dist/parse-json-bignumber'
+import create from '@waves/parse-json-bignumber/dist/parse-json-bignumber'
 
 const {parse, stringify} = create()
 import {getTransactionSchema, orderSchemaV1, orderSchemaV2} from './schemas'

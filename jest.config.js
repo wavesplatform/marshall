@@ -10,7 +10,7 @@ module.exports = {
     "lcov"
   ],
   transform: {
-    "^.+\\.tsx?$": "ts-jest"
+    "^.+\\.tsx?$": "@swc/jest"
   },
   testRegex: "(/__tests__/.*|(\\.|/)(test))\\.tsx?$",
   moduleFileExtensions: [

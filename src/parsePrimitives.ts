@@ -1,4 +1,4 @@
-import Long = require('long')
+import Long from 'long'
 import {Utf8ArrayToStr} from './libs/Utf8ArrayToStr'
 import base58 from './libs/base58'
 import * as Base64 from 'base64-js'

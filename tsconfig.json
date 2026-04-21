@@ -9,9 +9,10 @@
     "sourceMap": true,
     "declaration": true,
     "module": "commonjs",
+    "rootDir": "./src",
     "outDir": "dist",
     "strict": true,
-    "downlevelIteration": true
+    "esModuleInterop": true
   },
   "include": [
     "./src/**/*"
